@@ -80,12 +80,12 @@ class Extractor:
         for problem in problem_list:
             c.execute(
                 '''
-                    INSERT INTO problem 
-                        (id, title, slug, difficulty, paid_only, status, total_acs, total_submitted) 
-                    VALUES 
+                    INSERT INTO problem
+                        (id, title, slug, difficulty, paid_only, status, total_acs, total_submitted)
+                    VALUES
                         (?, ?, ?, ?, ?, ?, ?, ?)
                 ''',
-                (problem['stat']['question_id']
+                (problem['stat']['frontend_question_id']
                  , problem['stat']['question__title']
                  , problem['stat']['question__title_slug']
                  , problem['difficulty']['level']
@@ -205,10 +205,10 @@ class Extractor:
         c.execute('CREATE TABLE IF NOT EXISTS description (title TEXT, path TEXT, PRIMARY KEY(title))')
         c.execute(
             '''
-                SELECT a.id, a.title, a.slug 
-                FROM problem a 
-                LEFT JOIN description b 
-                ON a.title=b.title 
+                SELECT a.id, a.title, a.slug
+                FROM problem a
+                LEFT JOIN description b
+                ON a.title=b.title
                 WHERE a.paid_only=0 AND b.title IS NULL
             ''')
         problems = c.fetchall()
@@ -367,11 +367,11 @@ class Extractor:
         c = conn.cursor()
         c.execute(
             '''
-                SELECT problem.id, submission.title 
-                FROM submission 
-                LEFT JOIN problem 
-                    ON submission.title=problem.title 
-                WHERE submission.downloaded=1 AND submission.removed=0 
+                SELECT problem.id, submission.title
+                FROM submission
+                LEFT JOIN problem
+                    ON submission.title=problem.title
+                WHERE submission.downloaded=1 AND submission.removed=0
                 GROUP BY submission.title
             ''')
         titles = c.fetchall()
